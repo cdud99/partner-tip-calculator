@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:untitled/Scan%20Tips/scan.dart';
-import 'package:untitled/mode_selection.dart';
 import 'Home Page/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -28,7 +26,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: const ModeSelectionPage(),
+      home: const MyHomePage(),
     );
   }
 }
