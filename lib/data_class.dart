@@ -1,3 +1,5 @@
+import 'package:untitled/partner_class.dart';
+
 class TipHelper {
   TipHelper();
 
@@ -7,11 +9,11 @@ class TipHelper {
   double totalHours = 0;
   final List<double> listHours = [];
 
-
   bool inputIsValid(String rawInput) {
     if (rawInput == '\$' || rawInput == '') return false;
     final String input = rawInput.substring(rawInput[0] == '\$' ? 1 : 0);
-    final String idealNumber = double.parse(input).toStringAsFixed(step == 1 ? 0 : 2);
+    final String idealNumber =
+        double.parse(input).toStringAsFixed(step == 1 ? 0 : 2);
     final bool valid = input == idealNumber;
     if (valid && step == 3) {
       if (listHours.isEmpty) return valid;
@@ -21,7 +23,6 @@ class TipHelper {
 
     return valid;
   }
-
 
   bool onSubmit(String input) {
     if (inputIsValid(input)) {
@@ -43,14 +44,12 @@ class TipHelper {
     return false;
   }
 
-
   double getValue() {
     if (step == 1) {
       return totalTips.toDouble();
     }
     return totalHours;
   }
-
 
   String getStepString() {
     if (step == 1) {
@@ -62,13 +61,20 @@ class TipHelper {
     }
   }
 
-
-  double roundDouble(double value, int places){
+  double roundDouble(double value, int places) {
     final double newValue = double.parse(value.toStringAsFixed(places));
     return newValue;
   }
 
   nextStep() {
     step += 1;
+  }
+
+  List<Partner> getPartners() {
+    List<Partner> partners = [];
+    listHours.forEach((hours) {
+      partners.add(Partner(hours: hours));
+    });
+    return partners;
   }
 }

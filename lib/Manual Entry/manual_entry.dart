@@ -3,14 +3,14 @@ import 'keypad.dart';
 import 'package:untitled/summary_page.dart';
 import '../data_class.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class ManualEntryPage extends StatefulWidget {
+  const ManualEntryPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<ManualEntryPage> createState() => _ManualEntryPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage>
+class _ManualEntryPageState extends State<ManualEntryPage>
     with SingleTickerProviderStateMixin {
   final TextEditingController textController =
       TextEditingController(text: '\$');
@@ -35,9 +35,16 @@ class _MyHomePageState extends State<MyHomePage>
     if (_focus.hasFocus) {
       if (!tipHelper.inputIsValid(textController.text)) return;
       if (tipHelper.onSubmit(textController.text)) {
-        // TODO: Fix summary page
-        // Navigator.push(context,
-        //     MaterialPageRoute(builder: (context) => SummaryPage()));
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          SummaryPage.routeName,
+          ModalRoute.withName('/home'),
+          arguments: SummaryArguments(
+            tipHelper.getPartners(),
+            tipHelper.totalTips,
+            tipHelper.totalHours,
+          ),
+        );
       }
       if ([1, 2].contains(tipHelper.step)) {
         double endValue = tipHelper.step == 1

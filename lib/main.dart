@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:untitled/mode_selection.dart';
+import 'package:untitled/Manual%20Entry/manual_entry.dart';
+import 'package:untitled/home_page.dart';
 import 'package:untitled/summary_page.dart';
 import 'package:untitled/Scan%20Tips/scan_page.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,8 +27,9 @@ class MyApp extends StatelessWidget {
         ),
       ),
       routes: {
-        '/home': (context) => const ModeSelectionPage(),
+        '/home': (context) => const HomePage(),
         '/scan': (context) => const ScanPage(),
+        '/manualEntry': (context) => const ManualEntryPage(),
         SummaryPage.routeName: (context) => const SummaryPage(),
       },
       debugShowCheckedModeBanner: false,

@@ -1,11 +1,17 @@
 class Partner {
-  int storeNumber = -1;
-  String name = '';
-  String numbers = '';
-  double hours = -1.0;
-  int tipAmount = -1;
+  int storeNumber;
+  String name;
+  String numbers;
+  double hours;
+  int tipAmount;
 
-  Partner();
+  Partner({
+    this.storeNumber = -1,
+    this.name = '',
+    this.numbers = '',
+    this.hours = -1.0,
+    this.tipAmount = -1,
+  });
 
   @override
   toString() {
