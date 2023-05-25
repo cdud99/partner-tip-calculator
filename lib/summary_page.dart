@@ -1,53 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:untitled/data_class.dart';
-
-import 'Scan Tips/scan.dart';
+import 'package:untitled/partner_class.dart';
 
 class SummaryPage extends StatefulWidget {
-  const SummaryPage(
-    this.tipHelper, {
-    this.partners,
-    this.totalTips,
-        this.totalHours,
-    Key? key,
-  }) : super(key: key);
+  static const routeName = '/summary';
 
-  final List<Partner>? partners;
-  final int? totalTips;
-  final double? totalHours;
-  final TipHelper tipHelper;
+  const SummaryPage({Key? key}) : super(key: key);
 
   @override
   State<SummaryPage> createState() => _SummaryPageState();
 }
 
 class _SummaryPageState extends State<SummaryPage> {
-  late TipHelper tipHelper;
-  late List<int> _tipAmounts;
   late double _tipRate;
-  List<Partner>? partners;
+  late List<Partner> partners;
+  late double totalHours;
+  late int totalTips;
 
-  var logger = Logger(
-    filter: null, // Use the default LogFilter (-> only log in debug mode)
-    printer: PrettyPrinter(), // Use the PrettyPrinter to format and logger.d log
-    output: null, // Use the default LogOutput (-> send everything to console)
-  );
+  var logger = Logger();
+
+  @override
+  void initState() {
+    final SummaryArguments args =
+        ModalRoute.of(context)!.settings.arguments as SummaryArguments;
+    partners = args.partners;
+    totalTips = args.totalTips;
+    totalHours = args.totalHours;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.partners != null) {
-      partners = widget.partners;
-      double counter = 0;
-      for (Partner partner in partners!) {
-        counter += partner.hours;
-      }
-      if (counter != widget.totalHours) {
-        logger.d(counter, widget.totalHours);
-        logger.d('Someone\'s hours are wrong');
-      }
+    partners = partners;
+    double counter = 0;
+    for (Partner partner in partners) {
+      counter += partner.hours;
     }
-    tipHelper = widget.tipHelper;
+    if (counter != totalHours) {
+      logger.d(counter, totalHours);
+      logger.d('Someone\'s hours are wrong');
+    }
 
     _calculateTips();
 
@@ -67,11 +59,11 @@ class _SummaryPageState extends State<SummaryPage> {
                       children: [
                         Text(
                           'Total Tips:',
-                          style: Theme.of(context).textTheme.headline5,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         Text(
-                          '\$${partners != null ? widget.totalTips : tipHelper.totalTips}',
-                          style: Theme.of(context).textTheme.headline5,
+                          '\$$totalTips',
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                       ],
                     ),
@@ -84,11 +76,11 @@ class _SummaryPageState extends State<SummaryPage> {
                       children: [
                         Text(
                           'Total Hours:',
-                          style: Theme.of(context).textTheme.headline5,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         Text(
-                          '${partners != null ? widget.totalHours! : tipHelper.totalHours} hrs',
-                          style: Theme.of(context).textTheme.headline5,
+                          '$totalHours hrs',
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                       ],
                     ),
@@ -101,11 +93,11 @@ class _SummaryPageState extends State<SummaryPage> {
                       children: [
                         Text(
                           'Tip Rate:',
-                          style: Theme.of(context).textTheme.headline5,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         Text(
                           '\$${_tipRate.toStringAsFixed(3)}',
-                          style: Theme.of(context).textTheme.headline5,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                       ],
                     ),
@@ -117,10 +109,10 @@ class _SummaryPageState extends State<SummaryPage> {
               flex: 5,
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: partners != null ? partners!.length : tipHelper.listHours.length,
+                itemCount: partners.length,
                 itemBuilder: (context, index) {
-                  final String hours = partners != null ? partners![index].hours.toStringAsFixed(2) : tipHelper.listHours[index].toStringAsFixed(2);
-                  final String payout = partners != null ? partners![index].tipAmount.toStringAsFixed(2) :  _tipAmounts[index].toStringAsFixed(2);
+                  final String hours = partners[index].hours.toStringAsFixed(2);
+                  final String payout = partners[index].tipAmount.toString();
 
                   return Padding(
                     padding:
@@ -130,11 +122,11 @@ class _SummaryPageState extends State<SummaryPage> {
                       children: [
                         Text(
                           hours,
-                          style: Theme.of(context).textTheme.headline5,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         Text(
                           '\$$payout',
-                          style: Theme.of(context).textTheme.headline5,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                       ],
                     ),
@@ -149,45 +141,31 @@ class _SummaryPageState extends State<SummaryPage> {
   }
 
   void _calculateTips() {
-    if (partners != null) {
-      double tipRate = widget.totalTips! / widget.totalHours!;
-      int totalPayout = 0;
-
-      while (totalPayout != widget.totalTips!) {
-        totalPayout = 0;
-        for (Partner partner in partners!) {
-          partner.tipAmount = (partner.hours * tipRate).round();
-          totalPayout += partner.tipAmount;
-        }
-        if (totalPayout < widget.totalTips!) {
-          tipRate += 0.001;
-        } else if (totalPayout > widget.totalTips!) {
-          tipRate -= 0.001;
-        }
-      }
-      _tipRate = tipRate;
-
-      return;
-    }
-    double tipRate = tipHelper.totalTips / tipHelper.totalHours;
-
-    List<int> tipAmounts = [];
+    double tipRate = totalTips / totalHours;
     int totalPayout = 0;
 
-    while (totalPayout != tipHelper.totalTips) {
-      tipAmounts.clear();
-      for (final hours in tipHelper.listHours) {
-        tipAmounts.add((hours * tipRate).round());
+    while (totalPayout != totalTips) {
+      totalPayout = 0;
+      for (Partner partner in partners) {
+        partner.tipAmount = (partner.hours * tipRate).round();
+        totalPayout += partner.tipAmount;
       }
-      totalPayout = tipAmounts.reduce((a, b) => a + b);
-      if (totalPayout < tipHelper.totalTips) {
+      if (totalPayout < totalTips) {
         tipRate += 0.001;
-      } else if (totalPayout > tipHelper.totalTips) {
+      } else if (totalPayout > totalTips) {
         tipRate -= 0.001;
       }
     }
-
-    _tipAmounts = tipAmounts;
     _tipRate = tipRate;
+
+    return;
   }
+}
+
+class SummaryArguments {
+  final List<Partner> partners;
+  final int totalTips;
+  final double totalHours;
+
+  SummaryArguments(this.partners, this.totalTips, this.totalHours);
 }

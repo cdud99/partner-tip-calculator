@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:untitled/Home%20Page/keypad.dart';
+import 'keypad.dart';
 import 'package:untitled/summary_page.dart';
 import '../data_class.dart';
 
@@ -35,8 +35,9 @@ class _MyHomePageState extends State<MyHomePage>
     if (_focus.hasFocus) {
       if (!tipHelper.inputIsValid(textController.text)) return;
       if (tipHelper.onSubmit(textController.text)) {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => SummaryPage(tipHelper)));
+        // TODO: Fix summary page
+        // Navigator.push(context,
+        //     MaterialPageRoute(builder: (context) => SummaryPage()));
       }
       if ([1, 2].contains(tipHelper.step)) {
         double endValue = tipHelper.step == 1

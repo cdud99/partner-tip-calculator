@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:untitled/Home%20Page/home_page.dart';
-import 'package:untitled/Scan%20Tips/scan.dart';
+
+import 'Manual Entry/home_page.dart';
 
 class ModeSelectionPage extends StatelessWidget {
   const ModeSelectionPage({Key? key}) : super(key: key);
@@ -20,8 +20,7 @@ class ModeSelectionPage extends StatelessWidget {
               backgroundColor: MaterialStateColor.resolveWith((states) => Colors.white),
               elevation: MaterialStateProperty.resolveWith((states) => 5),
             ),
-            onPressed: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => ScanPage())),
+            onPressed: () => Navigator.pushNamed(context, '/scan'),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Text(
@@ -39,7 +38,7 @@ class ModeSelectionPage extends StatelessWidget {
               elevation: MaterialStateProperty.resolveWith((states) => 5),
             ),
             onPressed: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => MyHomePage())),
+                context, MaterialPageRoute(builder: (context) => const MyHomePage())),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Text(
