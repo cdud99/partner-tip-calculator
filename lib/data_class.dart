@@ -66,15 +66,15 @@ class TipHelper {
     return newValue;
   }
 
-  nextStep() {
+  void nextStep() {
     step += 1;
   }
 
   List<Partner> getPartners() {
     List<Partner> partners = [];
-    listHours.forEach((hours) {
+    for (var hours in listHours) {
       partners.add(Partner(hours: hours));
-    });
+    }
     return partners;
   }
 }

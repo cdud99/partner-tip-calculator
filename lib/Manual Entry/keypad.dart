@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Keypad extends StatelessWidget {
-  const Keypad(this.textController, this.update, {Key? key}) : super(key: key);
+  const Keypad(this.textController, this.update, {super.key});
 
   final TextEditingController textController;
   final Function update;
@@ -14,7 +14,9 @@ class Keypad extends StatelessWidget {
       children: List.generate(4, (y) {
         return Expanded(
           child: Row(
-            children: List.generate(3, (x) {
+              children: List.generate(
+            3,
+            (x) {
               final index = y * 3 + x;
               return Expanded(
                 child: InkWell(
@@ -24,19 +26,19 @@ class Keypad extends StatelessWidget {
                       child: index == 11
                           ? const Icon(Icons.backspace_outlined)
                           : Text(
-                        buttons[index],
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      )),
+                              buttons[index],
+                              style: Theme.of(context).textTheme.headlineSmall,
+                            )),
                 ),
               );
-            },)
-      ),
+            },
+          )),
         );
       }),
     );
   }
 
-  _handlePressed(index) {
+  void _handlePressed(index) {
     String buttons = '123456789.0';
     if (index == 11) {
       if (textController.text == '\$' || textController.text == '') {

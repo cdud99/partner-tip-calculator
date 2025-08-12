@@ -232,7 +232,7 @@ class _ManualEntryPageState extends State<ManualEntryPage>
     super.dispose();
   }
 
-  editPopup() {
+  AlertDialog editPopup() {
     TextEditingController controller = TextEditingController();
     return AlertDialog(
       // title: const Text('Edit Value'),
@@ -257,7 +257,7 @@ class _ManualEntryPageState extends State<ManualEntryPage>
     );
   }
 
-  helpPopup() {
+  AlertDialog helpPopup() {
     return const AlertDialog(
       scrollable: true,
       title: Text('Need Help?'),
