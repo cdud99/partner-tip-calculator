@@ -172,21 +172,21 @@ class _ScanPageState extends State<ScanPage> {
         automaticallyImplyLeading: false,
         leading: IconButton(
             onPressed: () => Navigator.pop(context), icon: Icon(Icons.clear)),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: _switchScreenMode,
-              child: kDebugMode
-                  ? Icon(
+        actions: kDebugMode
+            ? [
+                Padding(
+                  padding: const EdgeInsets.only(right: 20.0),
+                  child: GestureDetector(
+                    onTap: _switchScreenMode,
+                    child: Icon(
                       _mode == ScreenMode.gallery
                           ? Icons.photo_camera_outlined
                           : Icons.no_photography_outlined,
-                    )
-                  : null,
-            ),
-          ),
-        ],
+                    ),
+                  ),
+                ),
+              ]
+            : null,
       ),
       body: GestureDetector(
         onTapDown: (details) => _handleTap(details),
